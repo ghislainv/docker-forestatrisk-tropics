@@ -44,4 +44,17 @@ RUN URL=http://downloads.rclone.org/rclone-current-linux-amd64.zip && \
   chown root:root /usr/bin/rclone && \
   chmod 755 /usr/bin/rclone
 
+# Specific MBB cluster config
+RUN mkdir -p /share/apps/bin && \
+  mkdir /share/apps/lib && \
+  mkdir /share/apps/gridengine && \
+  mkdir /share/bio && \
+  mkdir -p /opt/gridengine && \
+  mkdir -p /export/scrach && \
+  mkdir -p /usr/lib64 && \
+  /usr/sbin/groupadd --system --gid 400 sge && \
+  /usr/sbin/useradd --system --uid 400 --gid 400 -c GridEngine --shell /bin/true --home /opt/gridengine sge && \
+  ln -s /bin/bash /bin/mbb_bash && \
+  ln -s /bin/bash /bin/isem_bash
+
 # End
