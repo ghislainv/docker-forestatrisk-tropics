@@ -7,7 +7,6 @@ MAINTAINER Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 
 # Terminal
 ENV TERM=xterm
-ENV LC_ALL C.UTF-8
 
 # Install debian packages with apt-get
 ADD apt-packages.txt /tmp/apt-packages.txt
@@ -16,23 +15,17 @@ RUN apt-get update && \
     apt-get dist-upgrade -y && \
     xargs -a /tmp/apt-packages.txt apt-get install -y
 
-# Reconfigure locales
-RUN dpkg-reconfigure locales && \
-    locale-gen C.UTF-8 && \
-    /usr/sbin/update-locale LANG=C.UTF-8 && \
-    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    dpkg-reconfigure locales
+# Set LOCALE to UTF8
+RUN apt-get install -y locales
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen en_US.UTF-8 && \
+    dpkg-reconfigure locales && \
+    /usr/sbin/update-locale LANG=en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 
 # Clean-up
 RUN apt-get autoremove -y && \
     apt-get clean -y
-
-# Install python packages with pip
-ADD /requirements/ /tmp/requirements/
-RUN python3 -m pip install --upgrade pip && \
-    python3 -m pip install -r /tmp/requirements/pre-requirements.txt && \
-    python3 -m pip install https://github.com/ghislainv/forestatrisk/archive/master.zip && \
-    python3 -m pip install -r /tmp/requirements/additional-reqs.txt
 
 # Install RClone
 RUN URL=http://downloads.rclone.org/rclone-current-linux-amd64.zip && \
@@ -43,6 +36,19 @@ RUN URL=http://downloads.rclone.org/rclone-current-linux-amd64.zip && \
   rm -rf /tmp/* && \
   chown root:root /usr/bin/rclone && \
   chmod 755 /usr/bin/rclone
+
+# Create virtual env and activate it
+ENV VIRTUAL_ENV=/opt/venv-far
+RUN python3 -m virtualenv --python=/usr/bin/python3 $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Install python packages with pip
+ADD /requirements/ /tmp/requirements/
+RUN python3 -m pip install --upgrade pip && \
+    python3 -m pip install -r /tmp/requirements/pre-requirements.txt && \
+    python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" gdal==$(gdal-config --version) && \
+    python3 -m pip install https://github.com/ghislainv/forestatrisk/archive/master.zip && \
+    python3 -m pip install -r /tmp/requirements/additional-reqs.txt
 
 # Specific MBB cluster config
 RUN mkdir -p /share/apps/bin && \
