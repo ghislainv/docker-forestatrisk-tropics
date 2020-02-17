@@ -10,7 +10,7 @@ The docker comes preinstalled with Debian Buster, Python3, GDAL, RClone, and dep
 You can pull the container by running: 
 
 ```shell
-docker pull ghislainv/docker-forestatrisk-tropics.
+docker pull ghislainv/docker-forestatrisk-tropics
 ```
 
 Using [singularity](https://sylabs.io/guides/2.6/user-guide/build_a_container.html#downloading-a-existing-container-from-docker-hub) on the MBB cluster:
