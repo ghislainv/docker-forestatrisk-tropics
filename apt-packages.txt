@@ -12,6 +12,7 @@ libxml2-dev
 libxslt1-dev
 libreadline7
 libreadline-dev
+gdal-bin
 libgdal-dev
 build-essential
 curl
