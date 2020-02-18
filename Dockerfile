@@ -15,17 +15,18 @@ RUN apt-get update && \
     apt-get dist-upgrade -y && \
     xargs -a /tmp/apt-packages.txt apt-get install -y
 
-# Set LOCALE to UTF8
+# Set the locale and timezone
 RUN apt-get install -y locales
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen en_US.UTF-8 && \
-    dpkg-reconfigure locales && \
-    /usr/sbin/update-locale LANG=en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+RUN echo "Europe/Paris" > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=fr_FR.UTF-8
 
-# Clean-up
-RUN apt-get autoremove -y && \
-    apt-get clean -y
+ENV LANG fr_FR.UTF-8
+ENV LANGUAGE fr_FR.UTF-8
+ENV LC_ALL fr_FR.UTF-8
 
 # Install RClone
 RUN URL=http://downloads.rclone.org/rclone-current-linux-amd64.zip && \
@@ -37,16 +38,15 @@ RUN URL=http://downloads.rclone.org/rclone-current-linux-amd64.zip && \
   chown root:root /usr/bin/rclone && \
   chmod 755 /usr/bin/rclone
 
-# Create virtual env and activate it
-ENV VIRTUAL_ENV=/opt/venv-far
-RUN python3 -m virtualenv --python=/usr/bin/python3 $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# Clean-up
+RUN apt-get autoremove -y && \
+    apt-get clean -y
 
 # Install python packages with pip
+# GDAL/Python bindings must use system version
 ADD /requirements/ /tmp/requirements/
-RUN python3 -m pip install --upgrade pip && \
-    python3 -m pip install -r /tmp/requirements/pre-requirements.txt && \
-    python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" gdal==$(gdal-config --version) && \
+RUN python3 -m pip install -r /tmp/requirements/pre-requirements.txt && \
+    python3 -m pip install gdal==$(gdal-config --version) && \
     python3 -m pip install https://github.com/ghislainv/forestatrisk/archive/master.zip && \
     python3 -m pip install -r /tmp/requirements/additional-reqs.txt
 
