@@ -1,6 +1,6 @@
 # docker-forestatrisk-tropics
 
-Docker container to run the `forestatrisk` Python package.
+Docker container to run the `forestatrisk` Python package on the MBB cluster.
 
 The docker comes preinstalled with Debian Buster, Python3, GDAL, RClone, and dependencies to run the
 `forestatrisk` Python package.
