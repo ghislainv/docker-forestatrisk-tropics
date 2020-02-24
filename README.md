@@ -1,4 +1,4 @@
-# docker-forestatrisk-tropics
+# docker-forestatrisk-tropics :whale:
 
 Docker container to run the `forestatrisk` Python package on the [MBB](https://mbb.univ-montp2.fr/MBB/index.php) cluster.
 
