@@ -2,7 +2,7 @@
 # docker-forestatrisk-tropics
 
 # Base image
-FROM debian:buster
+FROM debian:testing
 MAINTAINER Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
 
 # Terminal
