@@ -2,7 +2,7 @@
 
 Docker container to run the `forestatrisk` Python package on the [MBB](https://mbb.univ-montp2.fr/MBB/index.php) cluster.
 
-The docker comes preinstalled with Debian Buster, Python3, GDAL, RClone, and dependencies to run the
+The docker comes preinstalled with Debian testing, Python3, GDAL, RClone, and dependencies to run the
 `forestatrisk` Python package.
 
 ## Usage
