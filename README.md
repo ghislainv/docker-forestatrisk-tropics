@@ -1,9 +1,10 @@
 # docker-forestatrisk-tropics :whale:
 
-Docker container to run the `forestatrisk` Python package on the [MBB](https://mbb.univ-montp2.fr/MBB/index.php) cluster.
+Docker container to run the `forestatrisk` Python package on the
+[MBB](https://mbb.univ-montp2.fr/MBB/index.php) cluster.
 
-The docker comes preinstalled with Debian testing, Python3, GDAL, RClone, and dependencies to run the
-`forestatrisk` Python package.
+The docker comes preinstalled with Debian testing, Python3, GDAL,
+RClone, and dependencies to run the `forestatrisk` Python package.
 
 ## Usage
 
@@ -23,7 +24,9 @@ sudo docker run -ti docker-forestatrisk-tropics
 
 ### With singularity
 
-Using [singularity](https://sylabs.io/guides/2.6/user-guide/build_a_container.html#downloading-a-existing-container-from-docker-hub) on the MBB cluster:
+Using
+[singularity](https://sylabs.io/guides/2.6/user-guide/build_a_container.html#downloading-a-existing-container-from-docker-hub)
+on the MBB cluster:
 
 ```shell
 singularity build forestatrisk-tropics.simg docker://ghislainv/docker-forestatrisk-tropics
