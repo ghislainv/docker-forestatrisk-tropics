@@ -46,7 +46,7 @@ RUN apt-get autoremove -y && \
 ADD /requirements/ /tmp/requirements/
 RUN python3 -m pip install -r /tmp/requirements/pre-requirements.txt && \
     python3 -m pip install gdal==$(gdal-config --version) && \
-    python3 -m pip install https://github.com/ghislainv/forestatrisk/archive/master.zip && \
+    python3 -m pip install -U https://github.com/ghislainv/forestatrisk/archive/master.zip && \
     python3 -m pip install -r /tmp/requirements/additional-reqs.txt
 
 # Specific MBB cluster config
