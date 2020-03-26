@@ -41,14 +41,6 @@ RUN URL=http://downloads.rclone.org/rclone-current-linux-amd64.zip && \
 RUN apt-get autoremove -y && \
     apt-get clean -y
 
-# Install python packages with pip
-# GDAL/Python bindings must use system version
-ADD /requirements/ /tmp/requirements/
-RUN python3 -m pip install -r /tmp/requirements/pre-requirements.txt && \
-    python3 -m pip install gdal==$(gdal-config --version) && \
-    python3 -m pip install https://github.com/ghislainv/forestatrisk/archive/master.zip && \
-    python3 -m pip install -r /tmp/requirements/additional-reqs.txt
-
 # Specific MBB cluster config
 RUN mkdir -p /share/apps/bin && \
   mkdir /share/apps/lib && \
@@ -61,5 +53,16 @@ RUN mkdir -p /share/apps/bin && \
   /usr/sbin/useradd --system --uid 400 --gid 400 -c GridEngine --shell /bin/true --home /opt/gridengine sge && \
   ln -s /bin/bash /bin/mbb_bash && \
   ln -s /bin/bash /bin/isem_bash
+
+# Install python packages with pip
+# GDAL/Python bindings must use system version
+ADD /requirements/ /tmp/requirements/
+RUN python3 -m pip install -r /tmp/requirements/pre-requirements.txt && \
+    python3 -m pip install gdal==$(gdal-config --version) && \
+    python3 -m pip install -r /tmp/requirements/additional-reqs.txt
+# Use this trick to avoid cache
+# https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
+RUN python3 -m pip install https://github.com/ghislainv/forestatrisk/archive/master.zip
 
 # End
