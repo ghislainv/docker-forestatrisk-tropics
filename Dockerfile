@@ -3,7 +3,7 @@
 
 # Base image
 FROM debian:testing
-MAINTAINER Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>
+LABEL maintainer="Ghislain Vieilledent <ghislain.vieilledent@cirad.fr>"
 
 # Terminal
 ENV TERM=xterm
@@ -28,7 +28,7 @@ ENV LANG fr_FR.UTF-8
 ENV LC_ALL fr_FR.UTF-8
 
 # Install RClone
-RUN URL=http://downloads.rclone.org/rclone-current-linux-amd64.zip && \
+RUN URL=https://downloads.rclone.org/rclone-current-linux-amd64.zip && \
   cd /tmp && \
   wget -q $URL && \
   unzip /tmp/rclone-current-linux-amd64.zip && \
